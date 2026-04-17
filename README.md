@@ -270,6 +270,6 @@ helpful guide, not medical advice.
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+Proprietary, all rights reserved. Copyright © 2026 VROTEK OÜ.
 
 Made by [VROTEK](https://github.com/TeamVrotek).
