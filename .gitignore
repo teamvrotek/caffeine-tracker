@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+*.log
+.vscode/
+.idea/
+
+# Build output - ship .streamDeckPlugin via Releases, not in the repo tree
+Release/*.streamDeckPlugin
+
+# Dev-only scratch
+/tmp/caffeine-preview/
+/tmp/caffeine-icons/
