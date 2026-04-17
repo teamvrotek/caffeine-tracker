@@ -1,12 +1,32 @@
-# Caffeine Tracker
+<p align="center">
+  <img src="https://vrotek.com/assets/logo.svg?v=1.0" alt="VROTEK" width="80" height="80">
+</p>
 
-A Stream Deck plugin that tracks caffeine in your bloodstream using half-life math.
-Press a button to log a drink. Every button shows your current total mg + the clock time
-when you'll be below the sleep-disrupting threshold.
+<h1 align="center">Caffeine Tracker</h1>
 
-![Safe state](previews/preview-safe.png) ![Fine state](previews/preview-fine.png) ![High state](previews/preview-high.png) ![Over state](previews/preview-over.png)
+<p align="center">
+  <strong>Track caffeine in your bloodstream with half-life math, straight from your Stream Deck</strong>
+</p>
 
-## How it works
+<p align="center">
+  <a href="#how-it-works">How It Works</a> •
+  <a href="#install">Install</a> •
+  <a href="#settings">Settings</a> •
+  <a href="#built-in-presets-click-to-fill">Presets</a> •
+  <a href="#full-caffeine-reference-for-custom-entries">Caffeine Reference</a> •
+  <a href="#development">Development</a>
+</p>
+
+<p align="center">
+  <img src="previews/preview-safe.png" width="110" alt="Safe state">
+  <img src="previews/preview-fine.png" width="110" alt="Fine state">
+  <img src="previews/preview-high.png" width="110" alt="High state">
+  <img src="previews/preview-over.png" width="110" alt="Over state">
+</p>
+
+---
+
+## How It Works
 
 - Each button is configured with a **drink label + dose size in mg** (PI).
 - Short press → log one dose of that drink.
@@ -272,4 +292,8 @@ helpful guide, not medical advice.
 
 Proprietary, all rights reserved. Copyright © 2026 VROTEK OÜ.
 
-Made by [VROTEK](https://github.com/TeamVrotek).
+---
+
+<p align="center">
+  <sub>Built with caffeine and determination by <a href="https://github.com/TeamVrotek">VROTEK</a></sub>
+</p>
