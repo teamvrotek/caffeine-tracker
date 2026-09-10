@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Flat white cup</title>
+  <ellipse cx="47" cy="82" rx="39" ry="9" fill="#F5EDDE"/>
+  <g transform="translate(0 3)">
+  <path d="M68 42C95 26 101 56 78 68L67 70 69 60C88 55 88 36 74 48Z" fill="#F5EDDE"/>
+  <path d="M19 40H74Q73 65 62 74Q47 84 31 74Q21 65 19 40Z" fill="#F5EDDE" stroke="#101111" stroke-width="2.5"/>
+  <ellipse cx="46.5" cy="40" rx="27.5" ry="10" fill="#F5EDDE"/>
+  <ellipse cx="46.5" cy="40" rx="23" ry="6.5" fill="#997049"/>
+  <path d="M46 36C34 29 31 40 46 45C62 40 58 29 46 36Z" fill="#F5EDDE"/>
+  </g>
+</svg>

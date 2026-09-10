@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Energy drink can</title>
+  <path d="M34 13H66L72 22V86L67 93Q50 97 33 93L28 86V22Z" fill="#F5EDDE"/>
+  <path d="M28 67Q52 45 65 24L72 22V57Q58 83 36 93L28 86Z" fill="#0865DF"/>
+  <path d="M33 13Q50 19 67 13" fill="none" stroke="#101111" stroke-width="2.5"/>
+  <ellipse cx="50" cy="12" rx="17" ry="5.5" fill="#F5EDDE"/>
+  <ellipse cx="50" cy="12" rx="8" ry="2.8" fill="#101111"/>
+  <ellipse cx="50" cy="11.3" rx="4.5" ry="1.2" fill="#F5EDDE"/>
+  <path d="M31 90Q50 97 69 90" fill="none" stroke="#101111" stroke-width="2.5"/>
+</svg>

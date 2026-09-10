@@ -1,49 +1,121 @@
 <p align="center">
-  <img src="https://vrotek.com/assets/logo.svg?v=1.0" alt="VROTEK" width="80" height="80">
+  <img src="com.teamvrotek.caffeinetracker.sdPlugin/imgs/pluginIcon.png" alt="Cream coffee mug on a cool charcoal background" width="128" height="128">
 </p>
 
 <h1 align="center">Caffeine Tracker</h1>
 
-<p align="center">
-  <strong>Track caffeine in your bloodstream with half-life math, straight from your Stream Deck</strong>
-</p>
+<p align="center"><strong>Version 2.0</strong></p>
 
-<p align="center">
-  <a href="#how-it-works">How It Works</a> •
-  <a href="#install">Install</a> •
-  <a href="#settings">Settings</a> •
-  <a href="#built-in-presets-click-to-fill">Presets</a> •
-  <a href="#full-caffeine-reference-for-custom-entries">Caffeine Reference</a> •
-  <a href="#development">Development</a>
-</p>
+Follow your caffeine afterlife. Your coffee has a long goodbye.
 
-<p align="center">
-  <img src="previews/preview-safe.png" width="110" alt="Safe state">
-  <img src="previews/preview-fine.png" width="110" alt="Fine state">
-  <img src="previews/preview-high.png" width="110" alt="High state">
-  <img src="previews/preview-over.png" width="110" alt="Over state">
-</p>
+Log drinks with one tap, track estimated caffeine remaining and get an optional sleep estimate. Choose your drink icons, set your caffeine amounts and add the coffees you forgot to log. Everything stays on your device.
 
----
+Requires Stream Deck 6.9+, macOS 13+ or Windows 11 (64-bit).
 
-## How It Works
+If you find this useful, follow @teamvrotek on GitHub or Instagram. Your support helps us feel more special, thank you.
 
-- Each button is configured with a **drink label + dose size in mg** (PI).
-- Short press → log one dose of that drink.
-- Long press (~0.7s) → undo the most recent dose (any drink, globally).
-- Every button shows the **same** current total mg and **same** safe-to-sleep time, because caffeine in your bloodstream is a single number - the buttons just differ in what they log.
-- The border + number color change by zone: green (safe) → yellow (fine) → orange (high) → red (over FDA 400mg daily max).
+![Drink keys and a shared caffeine status display](docs/images/overview.png)
 
-The math:
+*All previews use sample data.*
 
+## Install and set up
+
+You need **Stream Deck 6.9+** on **macOS 13+** or **Windows 11 (64-bit)**. The plugin runs on Stream Deck's bundled Node.js runtime. You do not need to install Node.js to use it.
+
+1. Open `com.teamvrotek.caffeinetracker.streamDeckPlugin` on your computer and follow Stream Deck's installation prompt. To create the installer from source, see [Build from source](#build-from-source). The build puts it in `Release/`.
+2. Find **Caffeine Tracker** in the action list and drag **Log drink** onto a key.
+3. In **This key**, choose a drink and **Serving per press**. Check the **Caffeine** amount against your actual serving and adjust it if needed.
+4. Choose an **Appearance**. The artwork and caffeine amount are independent, so you can use any cup or can for a custom drink.
+5. Add more **Log drink** keys for your other drinks, then add **Caffeine status** and choose its **Display**.
+6. Open **Sleep** and set **My bedtime** and your preferred time format.
+
+For a simple setup, keep drink keys on **Drink only**, with **Show sleep estimate** off. Keep the sleep estimate on your status key. Choose **Drink + status** when you want a drink and the shared total together on one key.
+
+Existing keys keep their saved drink names and caffeine amounts when you update the plugin.
+
+## Tap to log, hold to undo
+
+A short press logs the amount shown on that key. A centred green circle with a white checkmark confirms the save for three seconds, fading during the final 0.6 seconds. The daily count stays visible in the top-right corner.
+
+![A coffee key confirms a drink and updates its daily count](docs/images/drink-confirmation.gif)
+
+**Hold any drink key for at least 0.7 seconds** to undo the most recently logged drink across all keys. Pressing **Caffeine status** changes its display and never logs or undoes drinks.
+
+The top-right badge counts drinks logged **today**. Two coffees show **2×**. The amount below the cup is **caffeine per press**, so a double espresso showing `+128 mg` still counts as one drink when logged once.
+
+Counts stay visible after confirmation and reset at local midnight. Entries with the same name share a count across keys and appearances. Undo, deleted drinks and history edits update the count too. Caffeine-free drinks count and add 0 mg.
+
+## Tap to check your status
+
+Choose one **Display** for each **Caffeine status** key:
+
+| Display | What it shows | Tap to see |
+|---|---|---|
+| Caffeine | Estimated caffeine remaining | Sleep estimate |
+| Sleep estimate | When caffeine reaches your sleep threshold | Caffeine |
+| Caffeine + sleep | Both estimates together | Status face |
+| Status face | A face that changes with estimated caffeine remaining | Caffeine + sleep |
+
+The other display stays visible for five seconds, then your chosen display returns. Press again to return sooner. Each status key keeps its own choice.
+
+The five static faces follow the same caffeine colour bands described below. They reflect estimated caffeine remaining, not how much you have consumed today.
+
+New status keys start with **Caffeine + sleep**. Existing status keys keep both estimates unless **Show sleep estimate** was turned off, in which case they keep the caffeine display.
+
+## Your drinks, your keys
+
+Choose from **20 presets** and **16 duotone appearances**, covering coffee, espresso, latte, cappuccino, flat white, cold brew, black tea, green tea, matcha, energy drinks, cola and pre-workout. Coke, Coke Zero, Diet Coke, Pepsi and caffeine-free Coke Zero-Zero have distinct choices.
+
+![The 16 available drink appearances](docs/images/drink-library.png)
+
+Every dose is editable from **0 to 500 mg per press**. Use **Custom** for your own drink, set its **Name in history**, and pick the artwork you want. Names appear in settings and history; the key face uses the picture.
+
+Preset amounts are starting estimates. Serving sizes and recipes vary, so check the product information for what you actually drink.
+
+## Settings, history and sleep
+
+The settings panel has **This key**, **History** and **Sleep** tabs, with a live preview of your key.
+
+![The settings panel with drink choices, editable history and sleep preferences](docs/images/settings.png)
+
+Use **History** to add a missed drink with its date and time, correct an entry or delete it. History is shared by every key. It keeps entries from local midnight seven days ago, plus older entries whose estimated caffeine remaining is still at least 0.5 mg.
+
+**Sleep** preferences also apply to every key:
+
+| Setting | Default | Options |
+|---|---|---|
+| My bedtime | 23:00 | Local time |
+| Time format | 24-hour | 12-hour or 24-hour |
+| Half-life | 5 hours | 3 to 8 hours, under Advanced |
+| Sleep threshold | 50 mg | 25 to 100 mg, under Advanced |
+
+**Estimated at your bedtime** projects your current caffeine estimate to the next occurrence of your chosen bedtime. **Below your sleep threshold** calculates when the estimate reaches your selected threshold. That second time is what the keys show as the sleep estimate.
+
+The key shows `Now` when the estimate is already at or below your threshold. Later dates include `+1d` or another day offset. Times follow local calendar days and daylight saving changes. On drink keys, **Show sleep estimate** can be turned on or off separately. Status keys use their **Display** choice.
+
+## How the estimate works
+
+Each logged dose decays over time using your selected half-life. The plugin adds the remaining amounts together:
+
+```text
+remaining_mg = sum(dose_mg × 0.5 ^ (hours_since_drink / half_life_hours))
 ```
-current_mg = Σ  dose.mg × 0.5 ^ ((now - dose.ts) / halfLife)
-safe_at    = now + halfLife × log₂(current_mg / threshold_mg)
-```
 
-When `current_mg ≤ threshold_mg`, the button shows a check instead of a clock.
+The live number changes colour and the status face changes expression as the estimated amount changes:
 
-## Install
+| Estimated caffeine remaining | Colour |
+|---|---|
+| Below 1 mg | Ivory |
+| 1 to below 100 mg | Mint |
+| 100 to below 200 mg | Yellow |
+| 200 to below 400 mg | Amber |
+| 400 mg or more | Coral |
+
+These colours describe estimated caffeine remaining, not daily intake or medical safety. The sleep time is an estimate, not a measurement of caffeine in your body or a guarantee that you will sleep well.
+
+## Build from source
+
+Building requires **Node.js 24 or later**, npm, `zip`, `unzip` and a shell that can run `build.sh`.
 
 ```bash
 git clone https://github.com/teamvrotek/caffeine-tracker.git
@@ -51,249 +123,38 @@ cd caffeine-tracker
 ./build.sh
 ```
 
-Double-click `Release/com.teamvrotek.caffeinetracker.streamDeckPlugin` in Finder to install.
+The script installs locked dependencies with `npm ci`, runs the tests, and validates and bundles the plugin files with pinned `@elgato/cli@1.9.0`. The final installer preserves the release version from the source manifest instead of the CLI's padded version. Open `Release/com.teamvrotek.caffeinetracker.streamDeckPlugin` to install it.
 
-Drop one or more "Caffeine Drink" actions onto your Stream Deck. Configure each with its own drink + dose in the Property Inspector.
-
-## Settings
-
-### Per-button (Property Inspector → This button)
-
-| Setting | Default | What it does |
-|---|---|---|
-| Drink label | Coffee | Text shown at the top of the button face |
-| Dose (mg) | 95 | Amount logged when the button is pressed |
-
-### Built-in presets (click to fill)
-
-| Label      | mg  | What it is |
-|---         |---  |--- |
-| Espresso   | 64  | Single 1oz shot |
-| Coffee     | 95  | Home drip, 8oz |
-| Cold Brew  | 205 | 12oz cold brew |
-| Latte      | 150 | Grande latte, 2 shots |
-| Starbucks  | 310 | Grande Pike Place (16oz) |
-| Black Tea  | 47  | Brewed black tea, 8oz |
-| Matcha     | 70  | One 2g serving (whisked) |
-| Red Bull   | 80  | 8.4oz (250ml) standard can |
-| Monster    | 160 | 16oz standard Monster |
-| Celsius    | 200 | 12oz Celsius |
-| Pre-Wkt    | 200 | Typical pre-workout scoop |
-| Coke       | 34  | 12oz Coca-Cola |
-
-### Full caffeine reference (for custom entries)
-
-Everyday caffeine intake varies by brand and preparation. The plugin lets you type a custom mg; use this table if your drink isn't a preset.
-
-**Coffee (home-brewed)**
-
-| Drink | Serving | mg |
-|---|---|---|
-| Espresso (single) | 1 oz | 63-65 |
-| Espresso (double) | 2 oz | 125-150 |
-| Drip coffee | 8 oz | 95 |
-| Drip coffee | 12 oz | 140 |
-| Drip coffee | 16 oz | 190 |
-| Pour-over | 8 oz | 105 |
-| French press | 8 oz | 107 |
-| Cold brew | 8 oz | 100-200 |
-| Cold brew | 12 oz | 200-280 |
-| Cold brew | 16 oz | 280-360 |
-| Latte (2 shots) | any | ~128 |
-| Americano (2 shots) | any | ~150 |
-| Decaf | 8 oz | 2-5 |
-
-**Starbucks** (official brand numbers)
-
-| Drink | Tall (12oz) | Grande (16oz) | Venti (20oz) |
-|---|---|---|---|
-| Pike Place Brewed | 235 | 310 | 410 |
-| Blonde Roast | 270 | 360 | 475 |
-| Cold Brew | 155 | 205 | 310 |
-| Nitro Cold Brew | 215 | 280 | - |
-| Iced Coffee | 120 | 165 | 235 |
-| Americano | 150 | 225 | 300 |
-| Latte | 75 | 150 | 150 |
-| Flat White | 130 | 195 | 195 |
-| Frappuccino (Coffee) | 70 | 95 | 130 |
-| Espresso shot (single) | 75 | - | - |
-
-**Energy drinks**
-
-| Drink | Serving | mg |
-|---|---|---|
-| Red Bull | 8.4 oz (250ml) | 80 |
-| Red Bull | 12 oz (355ml) | 110 |
-| Monster Energy | 16 oz | 160 |
-| Monster Ultra | 16 oz | 150 |
-| Rockstar | 16 oz | 160 |
-| Celsius | 12 oz | 200 |
-| Bang | 16 oz | 300 |
-| Reign | 16 oz | 300 |
-| C4 Energy | 16 oz | 200 |
-| 5-Hour Energy | 2 oz shot | 200 |
-| 5-Hour Extra Strength | 2 oz shot | 230 |
-
-**Soda** (12 oz serving)
-
-| Drink | mg |
-|---|---|
-| Coca-Cola | 34 |
-| Diet Coke | 46 |
-| Coke Zero Sugar | 34 |
-| Pepsi | 39 |
-| Diet Pepsi | 35 |
-| Pepsi Zero Sugar | 69 |
-| Mountain Dew | 54 |
-| Diet Mountain Dew | 55 |
-| Mountain Dew Kickstart | 90 |
-| Dr Pepper | 43 |
-| Diet Dr Pepper | 41 |
-| Surge | 69 |
-| Sprite / 7-Up | 0 |
-
-**Tea** (8 oz unless noted)
-
-| Drink | mg |
-|---|---|
-| Black tea (brewed) | 40-70 (avg ~47) |
-| Green tea | 20-50 (avg ~30) |
-| Oolong | 30-70 |
-| White tea | 15-30 |
-| Matcha (2g whisked) | 60-70 |
-| Yerba mate | 70-85 |
-| Chai latte (brewed with black) | 50-90 |
-| Bottled iced tea | 10-20 |
-| Starbucks Chai Latte (grande) | 95 |
-
-**Pre-workout and supplements**
-
-| Product | mg |
-|---|---|
-| C4 Sport | 135 |
-| C4 Original | 150 |
-| C4 Ultimate | 300 |
-| Bucked Up | 200 |
-| BAMF (Bucked Up) | 333 |
-| Mother Bucker (Bucked Up) | 400 |
-| NoDoz | 200 |
-| Vivarin | 200 |
-| Jet-Alert (regular) | 100 |
-| Jet-Alert (double) | 200 |
-| Caffeinated gum (Jolt / Stay Alert) | 100 per piece |
-
-**Chocolate and other**
-
-| Product | Serving | mg |
-|---|---|---|
-| Dark chocolate (70-80%) | 1 oz | ~20 |
-| Dark chocolate (85%+) | 1 oz | ~30 |
-| Milk chocolate bar | 1.5 oz | ~10 |
-| Hot cocoa | 8 oz | ~5 |
-| Coffee ice cream | ½ cup | ~30 |
-| Chocolate ice cream | ½ cup | ~3 |
-| Awake Chocolate bar | 1 bar | 101 |
-| Coca leaves tea (mate) | 8 oz | 80 |
-
-### A few notes
-
-- Numbers are industry averages. Actual content varies with bean varietal (Arabica vs Robusta), roast, brew time, and altitude.
-- Starbucks figures come from the company's official nutrition data. Home-brew numbers are from peer-reviewed surveys (CSPI, FDA).
-- Decaf is not caffeine-free - it's typically 2-5 mg per 8oz cup.
-- Cold brew varies the most: extended steeping time pulls more caffeine per ounce than hot-brewed coffee. Listed values assume ~1:7 coffee-to-water ratio.
-- Lighter roasts contain slightly MORE caffeine than dark roasts per volume (the counterintuitive part).
-
-### Global (Property Inspector → Global, affects all buttons)
-
-| Setting | Default | Range | What it does |
-|---|---|---|---|
-| Half-life hours | 5 | 3 - 8 | Personal metabolism rate. Lower = faster burn-off |
-| Sleep-safe threshold (mg) | 50 | 25 - 100 | Level below which sleep isn't meaningfully disrupted |
-
-Global settings live in Stream Deck's shared plugin settings and persist between launches.
-
-## Color zones
-
-| Current mg | Zone | Border |
-|---|---|---|
-| 0 | empty | slate |
-| 1 - 99 | safe | green |
-| 100 - 199 | fine | yellow |
-| 200 - 399 | high | orange |
-| 400+ | over | red (FDA daily max) |
+The installed plugin uses **Node.js 20**, supplied by Stream Deck.
 
 ## Development
 
-Layout:
-
-```
-caffeine-tracker/
-├── PLAN.md                              ← design notes
-├── build.sh                             ← zip the .sdPlugin
-├── com.teamvrotek.caffeinetracker.sdPlugin/
-│   ├── manifest.json
-│   ├── plugin.js                        ← main plugin (logging, global state, tick)
-│   ├── renderer.js                      ← SVG button face rendering
-│   ├── caffeine.js                      ← pure decay + safe-time math
-│   ├── caffeine.test.js                 ← math sanity tests
-│   ├── render_smoke.js                  ← preview renderer outputs to /tmp
-│   ├── package.json
-│   ├── imgs/                            ← plugin/category/action icons
-│   └── ui/
-│       └── property-inspector.html
-├── scripts/
-│   └── make_icons.mjs                   ← regenerate the icon pack (coffee-cup SVG → PNG @ every size)
-├── previews/
-└── Release/
-```
-
-Run the math tests:
+Run the tests from the plugin directory:
 
 ```bash
 cd com.teamvrotek.caffeinetracker.sdPlugin
-node --test caffeine.test.js
+npm ci
+npm test
 ```
 
-Preview button renders (writes SVG + PNG to `/tmp/caffeine-preview/`):
+The main source files are:
 
-```bash
-cd com.teamvrotek.caffeinetracker.sdPlugin
-node render_smoke.js
-rsvg-convert -w 288 /tmp/caffeine-preview/04-fine.svg -o /tmp/caffeine-preview/04-fine.png
-open /tmp/caffeine-preview/
-```
+| File | Responsibility |
+|---|---|
+| `config.js` | Presets, appearances and settings normalization |
+| `caffeine.js` | Decay, local time estimates and history retention |
+| `tracker.js` | Shared state, history edits and serialized saves |
+| `controller.js` | Stream Deck events, key updates and inspector messages |
+| `renderer.js` and `imgs/drinks/` | Key layouts and SVG artwork |
+| `plugin.js` | SDK connection, initial settings and periodic refresh |
+| `ui/` | Settings panel |
 
-## Requirements
-
-- Stream Deck 6.9+
-- macOS 10.15+ or Windows 10+
-- Node.js 20 (bundled in Stream Deck)
+These paths are inside `com.teamvrotek.caffeinetracker.sdPlugin/`.
 
 ## Privacy
 
-The plugin makes no network requests. All data stays local in Stream Deck's plugin settings.
-
-## Disclaimer
-
-The half-life model is an approximation. Individual caffeine metabolism varies with genetics
-(CYP1A2), age, pregnancy, smoking status, and medications. The "safe to sleep" readout is a
-helpful guide, not medical advice.
-
-## Sources (for the caffeine reference table)
-
-- Starbucks official nutrition info (via caffeineinformer.com)
-- Center for Science in the Public Interest (CSPI) caffeine chart
-- Healthline, Mayo Clinic caffeine guides
-- Chou & Bell (2007), *Caffeine Content of Prepackaged National-Brand and Private-Label Carbonated Beverages*, Journal of Food Science (for soda numbers)
-- Brand product labels (Red Bull, Monster, Celsius, Bang, Rockstar, C4, Bucked Up, Vivarin, NoDoz)
-- Caffeineinformer.com (industry reference)
+No account is needed. The installed plugin makes no external network requests. History and preferences stay in Stream Deck's local plugin settings on your computer.
 
 ## License
 
-Proprietary, all rights reserved. Copyright © 2026 VROTEK OÜ.
-
----
-
-<p align="center">
-  <sub>Built with caffeine and determination by <a href="https://github.com/TeamVrotek">VROTEK</a></sub>
-</p>
+MIT, see [LICENSE](LICENSE). Copyright © 2026 VROTEK OÜ.

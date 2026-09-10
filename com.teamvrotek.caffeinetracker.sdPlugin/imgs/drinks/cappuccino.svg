@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Cappuccino cup</title>
+  <ellipse cx="47" cy="81" rx="39" ry="10" fill="#F5EDDE"/>
+  <g transform="translate(0 3)">
+  <path d="M70 36C98 22 102 53 80 66L68 68 72 58C89 53 92 33 76 43Z" fill="#F5EDDE"/>
+  <path d="M16 34H76Q74 63 62 73Q46 83 30 73Q18 62 16 34Z" fill="#F5EDDE" stroke="#101111" stroke-width="2.5"/>
+  <ellipse cx="46" cy="34" rx="30" ry="11" fill="#F5EDDE"/>
+  <ellipse cx="46" cy="34" rx="25" ry="7" fill="#997049"/>
+  <path d="M28 35Q23 29 31 28Q34 23 40 27Q47 21 53 27Q61 23 63 29Q73 31 65 36Q55 40 46 38Q33 42 28 35Z" fill="#F5EDDE"/>
+  <circle cx="39" cy="32" r="1.2" fill="#997049"/><circle cx="51" cy="29" r="1.2" fill="#997049"/><circle cx="57" cy="34" r="1.2" fill="#997049"/>
+  </g>
+</svg>

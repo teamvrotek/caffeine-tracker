@@ -1,683 +1,105 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Caffeine Tracker Settings</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            font-size: 12px;
-            color: #d8d8d8;
-            background: #2d2d2d;
-            margin: 0;
-            padding: 10px;
-        }
-        .sdpi-wrapper { margin-bottom: 20px; }
-        .sdpi-section {
-            background: #252525;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 12px;
-        }
-        .sdpi-section-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: #9b9b9b;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        .sdpi-item {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-        }
-        .sdpi-item label {
-            color: #9b9b9b;
-            font-size: 11px;
-            margin-bottom: 4px;
-        }
-        .sdpi-item input[type="text"],
-        .sdpi-item input[type="number"] {
-            padding: 6px 8px;
-            border: 1px solid #404040;
-            border-radius: 3px;
-            background: #1a1a1a;
-            color: #d8d8d8;
-            font-size: 12px;
-            box-sizing: border-box;
-            width: 100%;
-            font-family: inherit;
-        }
-        .sdpi-item input[type="text"]:focus,
-        .sdpi-item input[type="number"]:focus {
-            outline: none;
-            border-color: #fde047;
-        }
-        .sdpi-item input[type="range"] {
-            width: 100%;
-            accent-color: #fde047;
-        }
-        .sdpi-info {
-            font-size: 10px;
-            color: #808080;
-            margin-top: 4px;
-            line-height: 1.4;
-        }
-        .status-box {
-            background: #1a1a1a;
-            border: 1px solid #404040;
-            border-radius: 4px;
-            padding: 10px;
-            margin-bottom: 12px;
-            font-family: "SF Mono", "Menlo", "Consolas", monospace;
-            font-size: 11px;
-            line-height: 1.6;
-            color: #b0b0b0;
-            white-space: pre;
-        }
-        .preset-row {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 4px;
-            margin-top: 6px;
-        }
-        .preset, .danger {
-            padding: 5px 8px;
-            border: 1px solid #404040;
-            border-radius: 3px;
-            background: #1a1a1a;
-            color: #d8d8d8;
-            font-size: 11px;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .preset:hover { border-color: #fde047; color: #fde047; }
-        .danger {
-            background: #3a1a1a;
-            border-color: #5a2a2a;
-            color: #fca5a5;
-            margin-top: 8px;
-            width: 100%;
-        }
-        .danger:hover { border-color: #ef4444; color: #fecaca; }
-        .zone-empty  { color: #64748b; }
-        .zone-safe   { color: #4ade80; }
-        .zone-fine   { color: #fde047; }
-        .zone-high   { color: #fb923c; }
-        .zone-over   { color: #ef4444; }
-        .sdpi-info-tight { margin: 6px 0 0 0; }
-        .value-pill {
-            display: inline-block;
-            padding: 1px 6px;
-            background: #1a1a1a;
-            border-radius: 8px;
-            color: #fde047;
-            font-size: 10px;
-            margin-left: 6px;
-            font-family: "SF Mono", "Menlo", monospace;
-        }
-
-        /* ---------- Dose log ---------- */
-        .summary-box {
-            background: #1a1a1a;
-            border: 1px solid #404040;
-            border-radius: 4px;
-            padding: 8px 10px;
-            margin-bottom: 10px;
-            font-family: "SF Mono", "Menlo", "Consolas", monospace;
-            font-size: 11px;
-            line-height: 1.6;
-            color: #b0b0b0;
-            white-space: pre;
-        }
-        .dose-list { display: flex; flex-direction: column; gap: 3px; }
-        .dose-empty {
-            color: #808080;
-            font-style: italic;
-            padding: 8px 4px;
-            text-align: center;
-        }
-        .dose-row {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 6px;
-            padding: 6px 8px;
-            background: #1a1a1a;
-            border: 1px solid #2f2f2f;
-            border-radius: 3px;
-            font-size: 11px;
-        }
-        .dose-row.editing { border-color: #fde047; }
-        .dose-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-        .dose-line { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
-        .dose-time { color: #fde047; font-weight: bold; font-family: "SF Mono", "Menlo", monospace; }
-        .dose-ago { color: #808080; font-size: 10px; }
-        .dose-label { color: #e2e8f0; }
-        .dose-mg { color: #9ca3af; }
-        .dose-residual { color: #4ade80; font-size: 10px; font-family: "SF Mono", "Menlo", monospace; }
-        .dose-actions { display: flex; gap: 4px; align-items: center; }
-        .dose-actions button {
-            padding: 2px 8px;
-            border: 1px solid #404040;
-            border-radius: 3px;
-            background: #2a2a2a;
-            color: #b0b0b0;
-            cursor: pointer;
-            font-size: 10px;
-            font-family: inherit;
-        }
-        .dose-actions button:hover { border-color: #fde047; color: #fde047; }
-        .dose-actions .del:hover { border-color: #ef4444; color: #fca5a5; }
-        .dose-edit {
-            grid-column: 1 / -1;
-            display: none;
-            flex-direction: column;
-            gap: 6px;
-            padding: 6px 2px 2px;
-            border-top: 1px dashed #404040;
-            margin-top: 4px;
-        }
-        .dose-row.editing .dose-edit { display: flex; }
-        .dose-edit-row { display: flex; gap: 8px; align-items: center; }
-        .dose-edit-row input[type="range"] { flex: 1; accent-color: #fde047; }
-        .dose-edit-row input[type="time"],
-        .add-form input[type="time"] {
-            padding: 4px 8px;
-            border: 1px solid #404040;
-            border-radius: 3px;
-            background: #1a1a1a;
-            color: #fde047;
-            font-family: "SF Mono", "Menlo", "Consolas", monospace;
-            font-size: 12px;
-        }
-        .dose-edit-row input[type="time"] { flex: 1; }
-        .dose-edit-row input[type="time"]:focus,
-        .add-form input[type="time"]:focus { outline: none; border-color: #fde047; }
-        .dose-edit-buttons { display: flex; gap: 4px; justify-content: flex-end; }
-        .primary {
-            padding: 6px 10px;
-            border: 1px solid #ca8a04;
-            border-radius: 3px;
-            background: #3a2a05;
-            color: #fde047;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 12px;
-            width: 100%;
-            margin-top: 6px;
-        }
-        .primary:hover { background: #4a3a15; }
-        .add-form { margin-top: 10px; padding-top: 10px; border-top: 1px solid #333; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Caffeine Tracker settings</title>
+    <link rel="stylesheet" href="property-inspector.css">
+    <script src="property-inspector.js" defer></script>
 </head>
 <body>
-<div class="sdpi-wrapper">
-
-    <div class="summary-box" id="summaryBox">Loading…</div>
-
-    <div class="sdpi-section">
-        <div class="sdpi-section-title">Dose log (live)</div>
-        <div class="dose-list" id="doseList">
-            <div class="dose-empty">No active doses.</div>
+<section class="inspector" aria-label="Caffeine Tracker settings">
+    <header class="header">
+        <img src="../imgs/drinks/coffee.svg" width="24" height="24" alt="">
+        <span>Caffeine Tracker</span>
+    </header>
+    <div class="preview-row">
+        <div class="key-frame">
+            <img id="key-preview" width="112" height="112" alt="Live Stream Deck key preview" hidden>
+            <span id="preview-loading" class="small">Connecting…</span>
         </div>
-
-        <div class="add-form">
-            <div class="sdpi-item">
-                <label>Drink label</label>
-                <input type="text" id="addLabel" maxlength="12" placeholder="Coffee" />
+        <div class="preview-copy">
+            <div class="eyebrow">Key preview</div>
+            <div class="preview-title" id="preview-title">This key</div>
+            <div class="preview-description" id="preview-description">Waiting for your settings</div>
+            <div class="small preview-detail" id="preview-detail"></div>
+        </div>
+    </div>
+    <div class="message" id="message" role="alert" hidden></div>
+    <div class="tabs" role="tablist" aria-label="Settings sections">
+        <button class="tab" id="tab-key" type="button" role="tab" aria-selected="true" aria-controls="panel-key">This key</button>
+        <button class="tab" id="tab-history" type="button" role="tab" aria-selected="false" aria-controls="panel-history" tabindex="-1">History</button>
+        <button class="tab" id="tab-sleep" type="button" role="tab" aria-selected="false" aria-controls="panel-sleep" tabindex="-1">Sleep</button>
+    </div>
+    <div class="panel" id="panel-key" role="tabpanel" aria-labelledby="tab-key">
+        <div id="drink-settings">
+            <span class="field-label" id="drink-label">Drink</span>
+            <div class="presets" id="presets" role="group" aria-labelledby="drink-label"></div>
+            <p class="small" id="catalog-loading">Loading drinks…</p>
+            <button class="plain-button more-drinks" id="more-drinks" type="button" aria-expanded="false" aria-controls="presets" hidden>More drinks</button>
+            <div class="fields">
+                <label class="field"><span>Serving per press</span><select id="serving" disabled></select></label>
+                <label class="field"><span>Caffeine</span><span class="unit-input"><input id="dose" type="number" min="0" max="500" step="1" aria-label="Caffeine per press in milligrams" disabled><span class="unit">mg</span></span></label>
             </div>
-            <div class="sdpi-item">
-                <label>Dose (mg)</label>
-                <input type="number" id="addMg" min="1" max="500" value="95" />
+            <label class="field custom-name" id="label-field"><span>Name in history</span><input id="label" type="text" maxlength="36" disabled></label>
+            <label class="field appearance-field"><span>Appearance</span><span class="appearance-control"><img id="appearance-preview" width="30" height="30" alt="" hidden><select id="appearance" disabled></select></span></label>
+            <p class="hint">Caffeine amounts vary. Adjust the amount to match your drink.</p>
+            <hr>
+            <span class="field-label" id="layout-label">On this key</span>
+            <div class="segment" id="layout-options" role="group" aria-labelledby="layout-label">
+                <label><input type="radio" name="layout" value="drink" data-layout="drink" disabled>Drink only</label>
+                <label><input type="radio" name="layout" value="combined" data-layout="combined" disabled>Drink + status</label>
             </div>
-            <div class="sdpi-item">
-                <label>When you drank it<span class="value-pill" id="addAgoDisplay">just now</span></label>
-                <input type="time" id="addTime" step="60" />
-                <div class="sdpi-info">Time-of-day. If it's later than now, assumed to be yesterday.</div>
+        </div>
+        <div id="status-settings" hidden>
+            <span class="field-label" id="status-display-label">Display</span>
+            <div class="status-displays" role="radiogroup" aria-labelledby="status-display-label" aria-describedby="status-display-note">
+                <label class="status-display"><input type="radio" name="status-display" value="caffeine" data-status-display="caffeine" disabled><span class="status-display-preview"><img id="status-preview-caffeine" width="72" height="72" alt="" hidden></span><span>Caffeine</span></label>
+                <label class="status-display"><input type="radio" name="status-display" value="sleep" data-status-display="sleep" disabled><span class="status-display-preview"><img id="status-preview-sleep" width="72" height="72" alt="" hidden></span><span>Sleep estimate</span></label>
+                <label class="status-display"><input type="radio" name="status-display" value="combined" data-status-display="combined" disabled><span class="status-display-preview"><img id="status-preview-combined" width="72" height="72" alt="" hidden></span><span>Caffeine + sleep</span></label>
+                <label class="status-display"><input type="radio" name="status-display" value="face" data-status-display="face" disabled><span class="status-display-preview"><img id="status-preview-face" width="72" height="72" alt="" hidden></span><span>Status face</span></label>
             </div>
-            <button id="addDoseBtn" class="primary">+ Add dose</button>
+            <p class="hint" id="status-display-note">Press to show status face for five seconds. Press again to return.</p>
         </div>
+        <label class="check" id="show-sleep-field"><input type="checkbox" id="show-sleep" disabled><span>Show sleep estimate</span></label>
+        <p class="hint" id="layout-note">Keep your total on a separate status key.</p>
     </div>
-
-    <div class="sdpi-section">
-        <div class="sdpi-section-title">This button</div>
-        <div class="sdpi-item">
-            <label>Drink label (shown on face)</label>
-            <input type="text" id="label" maxlength="12" placeholder="Coffee" />
-        </div>
-        <div class="sdpi-item">
-            <label>Dose in mg (logged per press)</label>
-            <input type="number" id="dose" min="1" max="500" placeholder="95" />
-        </div>
-        <div class="sdpi-info">Presets (click to fill). All values sourced from brand data / peer-reviewed surveys - see README for the full reference.</div>
-        <div class="preset-row">
-            <button class="preset" data-label="Espresso"  data-dose="64"  title="Single 1oz shot">Espresso · 64</button>
-            <button class="preset" data-label="Coffee"    data-dose="95"  title="Home drip 8oz">Coffee · 95</button>
-            <button class="preset" data-label="Cold Brew" data-dose="205" title="12oz cold brew">Cold Brew · 205</button>
-            <button class="preset" data-label="Latte"     data-dose="150" title="Grande latte, 2 shots">Latte · 150</button>
-            <button class="preset" data-label="Starbucks" data-dose="310" title="Grande Pike Place (16oz)">Starbucks · 310</button>
-            <button class="preset" data-label="Black Tea" data-dose="47"  title="Brewed black tea 8oz">Black Tea · 47</button>
-            <button class="preset" data-label="Matcha"    data-dose="70"  title="One 2g serving matcha">Matcha · 70</button>
-            <button class="preset" data-label="Red Bull"  data-dose="80"  title="8.4oz (250ml) can">Red Bull · 80</button>
-            <button class="preset" data-label="Monster"   data-dose="160" title="16oz standard Monster">Monster · 160</button>
-            <button class="preset" data-label="Celsius"   data-dose="200" title="12oz Celsius">Celsius · 200</button>
-            <button class="preset" data-label="Pre-Wkt"   data-dose="200" title="Typical pre-workout scoop">Pre-Wkt · 200</button>
-            <button class="preset" data-label="Coke"      data-dose="34"  title="12oz Coca-Cola">Coke · 34</button>
-        </div>
+    <div class="panel" id="panel-history" role="tabpanel" aria-labelledby="tab-history" hidden>
+        <div class="history-heading"><strong>Drink history</strong><span class="small" id="history-count"></span></div>
+        <div id="history-list"><p class="empty">Loading your drinks…</p></div>
+        <button class="button missed-button" id="add-missed" type="button" aria-expanded="false" aria-controls="missed-form" disabled><span aria-hidden="true">+</span> Add a missed drink</button>
+        <form class="missed-form" id="missed-form" hidden>
+            <label class="field"><span>Drink</span><select id="missed-drink" required></select></label>
+            <div class="fields missed-fields">
+                <label class="field"><span>Serving</span><select id="missed-serving" required></select></label>
+                <label class="field"><span>Caffeine, mg</span><input id="missed-dose" type="number" min="0" max="500" step="1" required></label>
+            </div>
+            <label class="field"><span>Name in history</span><input id="missed-label" type="text" maxlength="36" required></label>
+            <label class="field"><span>Date and time</span><input id="missed-time" type="datetime-local" step="60" required></label>
+            <div class="quick-dates" aria-label="Choose a day"><button class="plain-button" type="button" data-day="0">Today</button><button class="plain-button" type="button" data-day="1">Yesterday</button></div>
+            <div class="form-actions"><button class="button" id="cancel-missed" type="button">Cancel</button><button class="button primary" id="save-missed" type="submit">Add drink</button></div>
+        </form>
     </div>
-
-    <div class="sdpi-section">
-        <div class="sdpi-section-title">Global (all buttons)</div>
-
-        <div class="sdpi-item">
-            <label>Half-life hours<span class="value-pill" id="halfLifeDisplay">5.0</span></label>
-            <input type="range" id="halfLifeHours" min="3" max="8" step="0.5" value="5" />
-            <div class="sdpi-info">Default 5h. Lower = faster metabolism. Genetic range roughly 3-8h.</div>
+    <div class="panel" id="panel-sleep" role="tabpanel" aria-labelledby="tab-sleep" hidden>
+        <div class="sleep-heading"><span class="moon" aria-hidden="true">☾</span><span>Shared across all keys</span></div>
+        <div class="sleep-fields">
+            <label class="field"><span>My bedtime</span><input id="bedtime" type="time" step="60" disabled required></label>
+            <label class="field"><span>Time format</span><select id="time-format" disabled><option value="24">24-hour</option><option value="12">12-hour</option></select></label>
         </div>
-
-        <div class="sdpi-item">
-            <label>Sleep-safe threshold<span class="value-pill" id="thresholdDisplay">50 mg</span></label>
-            <input type="range" id="thresholdMg" min="25" max="100" step="5" value="50" />
-            <div class="sdpi-info">Caffeine level below which sleep isn't meaningfully disrupted.</div>
-        </div>
-
-        <button id="clearDoses" class="danger">Clear all doses</button>
+        <div class="sleep-result"><span>Estimated at your bedtime</span><output id="bedtime-mg">…</output></div>
+        <div class="sleep-result"><span>Below your sleep threshold</span><output id="sleep-estimate">…</output></div>
+        <details>
+            <summary>Advanced</summary>
+            <div class="advanced-fields">
+                <label class="field"><span>Half-life, hours</span><input id="half-life" type="number" min="3" max="8" step="0.5" disabled required></label>
+                <label class="field"><span>Sleep threshold, mg</span><input id="threshold" type="number" min="25" max="100" step="1" disabled required></label>
+            </div>
+            <p class="hint">A decay estimate. Individual responses vary.</p>
+            <p class="hint">Colour bands describe estimated caffeine remaining, not daily intake or medical safety.</p>
+        </details>
     </div>
-
-    <div class="sdpi-info sdpi-info-tight">
-        Tap to log one dose. Hold (~0.7s) any button to undo the most recent dose.
-    </div>
-</div>
-
-<script>
-let websocket = null;
-let uuid = null;
-let actionInfo = {};
-let statusPollTimer = null;
-
-function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegisterEvent, inInfo, inActionInfo) {
-    uuid = inPropertyInspectorUUID;
-    actionInfo = JSON.parse(inActionInfo);
-
-    websocket = new WebSocket("ws://127.0.0.1:" + inPort);
-
-    websocket.onopen = function() {
-        websocket.send(JSON.stringify({
-            event: inRegisterEvent,
-            uuid: inPropertyInspectorUUID
-        }));
-
-        loadActionSettings(actionInfo.payload.settings);
-        requestStatus();
-
-        // Poll for status changes so the PI stays in sync with the tick loop.
-        statusPollTimer = setInterval(requestStatus, 5000);
-    };
-
-    websocket.onmessage = function(evt) {
-        const msg = JSON.parse(evt.data);
-
-        if (msg.event === "didReceiveSettings") {
-            loadActionSettings(msg.payload.settings);
-        }
-
-        if (msg.event === "sendToPropertyInspector") {
-            handlePluginMessage(msg.payload);
-        }
-    };
-
-    websocket.onclose = function() {
-        if (statusPollTimer) clearInterval(statusPollTimer);
-    };
-}
-
-function requestStatus() {
-    if (!websocket || websocket.readyState !== 1) return;
-    websocket.send(JSON.stringify({
-        event: "sendToPlugin",
-        context: uuid,
-        action: actionInfo.action,
-        payload: { type: "getStatus" }
-    }));
-}
-
-// ID of the dose currently being edited (null when no row is in edit mode).
-// We persist this across status refreshes so a live tick doesn't close the
-// edit form on the user mid-drag.
-let editingId = null;
-
-function handlePluginMessage(payload) {
-    if (!payload || payload.type !== "statusUpdate") return;
-    const d = payload.data;
-
-    renderSummary(d);
-    renderDoseList(Array.isArray(d.doses) ? d.doses : []);
-
-    // Populate global-settings controls if they haven't been touched yet.
-    const hl = document.getElementById("halfLifeHours");
-    const th = document.getElementById("thresholdMg");
-    if (!hl.dataset.touched) hl.value = d.halfLifeHours;
-    if (!th.dataset.touched) th.value = d.thresholdMg;
-    updateValuePills();
-}
-
-function renderSummary(d) {
-    const zoneClass = "zone-" + (d.zone || "empty");
-    const safeText = d.safeTime ? "bed " + d.safeTime : "\u2713 safe now";
-    const lines = [
-        "Current:  " + d.mg + " mg",
-        "Zone:     " + (d.zone || "empty").toUpperCase(),
-        "Safe:     " + safeText,
-        "Doses:    " + (d.doseCount || 0) + " active"
-    ];
-    const box = document.getElementById("summaryBox");
-    box.textContent = lines.join("\n");
-    box.className = "summary-box " + zoneClass;
-}
-
-function formatClock(ts) {
-    const d = new Date(ts);
-    return String(d.getHours()).padStart(2, "0") + ":" +
-           String(d.getMinutes()).padStart(2, "0");
-}
-
-// Convert a "HH:MM" time string to the most recent past timestamp that
-// matches it. If the time is later than now, we assume the user meant
-// yesterday (e.g. you're logging at 01:30am a coffee from 22:00 the day
-// before - typing "22:00" gives you yesterday 22:00, not today's future).
-function timeStrToRecentPastTs(timeStr, base = Date.now()) {
-    if (!timeStr) return base;
-    const parts = timeStr.split(":").map(x => parseInt(x, 10));
-    if (parts.length < 2 || parts.some(n => Number.isNaN(n))) return base;
-    const [hh, mm] = parts;
-    const d = new Date(base);
-    d.setHours(hh, mm, 0, 0);
-    if (d.getTime() > base) d.setDate(d.getDate() - 1);
-    return d.getTime();
-}
-
-// Return a human "X ago" + same/yesterday hint so the user can confirm
-// which day the time they typed maps to.
-function describeAgoFromTs(ts) {
-    const now = Date.now();
-    if (ts > now) return "future (clamped to now)";
-    const ageMs = now - ts;
-    const minutes = Math.floor(ageMs / 60000);
-    const ago = minutes < 1 ? "just now"
-              : minutes < 60 ? minutes + "m ago"
-              : Math.floor(minutes / 60) + "h " + (minutes % 60) + "m ago";
-    const sameDay = new Date(ts).toDateString() === new Date(now).toDateString();
-    return ago + " \u00b7 " + (sameDay ? "today" : "yesterday");
-}
-
-function formatAgo(ts) {
-    const minutes = Math.max(0, Math.floor((Date.now() - ts) / 60000));
-    if (minutes < 1) return "just now";
-    if (minutes < 60) return minutes + "m ago";
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    if (h < 24) return m > 0 ? h + "h " + m + "m ago" : h + "h ago";
-    const d = Math.floor(h / 24);
-    const rh = h % 24;
-    return rh > 0 ? d + "d " + rh + "h ago" : d + "d ago";
-}
-
-function el(tag, attrs, ...children) {
-    const node = document.createElement(tag);
-    if (attrs) {
-        for (const [k, v] of Object.entries(attrs)) {
-            if (k === "class") node.className = v;
-            else if (k === "dataset") {
-                for (const [dk, dv] of Object.entries(v)) node.dataset[dk] = dv;
-            }
-            else if (k.startsWith("on") && typeof v === "function") {
-                node.addEventListener(k.slice(2).toLowerCase(), v);
-            }
-            else node.setAttribute(k, v);
-        }
-    }
-    for (const child of children) {
-        if (child == null) continue;
-        node.appendChild(typeof child === "string" ? document.createTextNode(child) : child);
-    }
-    return node;
-}
-
-function renderDoseList(doses) {
-    const list = document.getElementById("doseList");
-    // Clear without innerHTML - safer per security policy
-    while (list.firstChild) list.removeChild(list.firstChild);
-
-    if (!doses.length) {
-        list.appendChild(el("div", { class: "dose-empty" },
-            "No active doses. Tap any button or add one below."));
-        editingId = null;
-        return;
-    }
-
-    for (const dose of doses) {
-        list.appendChild(buildDoseRow(dose));
-    }
-
-    // If the editing row is still present, reopen its edit form.
-    if (editingId) {
-        const still = list.querySelector(`.dose-row[data-id="${editingId}"]`);
-        if (still) openEditForRow(still);
-        else editingId = null;
-    }
-}
-
-function buildDoseRow(dose) {
-    const line1 = el("div", { class: "dose-line" },
-        el("span", { class: "dose-time" }, formatClock(dose.ts)),
-        el("span", { class: "dose-ago" }, formatAgo(dose.ts)));
-    const line2 = el("div", { class: "dose-line" },
-        el("span", { class: "dose-label" }, dose.label),
-        el("span", { class: "dose-mg" }, dose.mg + " mg"),
-        el("span", { class: "dose-residual" }, "\u2192 " + dose.residualMg + " now"));
-    const info = el("div", { class: "dose-info" }, line1, line2);
-
-    const editBtn = el("button", { class: "edit-dose", dataset: { id: dose.id },
-        onclick: (e) => { editingId = dose.id; openEditForRow(e.target.closest(".dose-row")); } },
-        "edit");
-    const delBtn = el("button", { class: "del-dose del", dataset: { id: dose.id },
-        onclick: () => sendToPlugin({ type: "deleteDose", id: dose.id }) },
-        "\u00d7");
-    const actions = el("div", { class: "dose-actions" }, editBtn, delBtn);
-
-    // Edit panel: time input prefilled to the dose's clock time, with a live
-    // "X ago · today/yesterday" hint so you can see what the time resolves to.
-    const timeInput = el("input", { type: "time", step: "60", class: "edit-time",
-        value: formatClock(dose.ts) });
-    const display = el("span", { class: "edit-ago-display value-pill" },
-        describeAgoFromTs(dose.ts));
-    const refreshDisplay = () => {
-        const newTs = timeStrToRecentPastTs(timeInput.value, Date.now());
-        display.textContent = describeAgoFromTs(newTs);
-    };
-    timeInput.addEventListener("input", refreshDisplay);
-    timeInput.addEventListener("change", refreshDisplay);
-
-    const cancelBtn = el("button", { class: "cancel-edit" }, "cancel");
-    const saveBtn = el("button", { class: "save-edit" }, "save");
-    const editPanel = el("div", { class: "dose-edit" },
-        el("div", { class: "dose-edit-row" }, timeInput, display),
-        el("div", { class: "dose-edit-buttons" }, cancelBtn, saveBtn));
-
-    const row = el("div", { class: "dose-row", dataset: { id: dose.id } },
-        info, actions, editPanel);
-
-    cancelBtn.addEventListener("click", () => {
-        editingId = null;
-        row.classList.remove("editing");
-    });
-    saveBtn.addEventListener("click", () => {
-        const newTs = timeStrToRecentPastTs(timeInput.value, Date.now());
-        sendToPlugin({ type: "editDose", id: dose.id, newTs });
-        editingId = null;
-    });
-
-    return row;
-}
-
-function openEditForRow(row) {
-    document.querySelectorAll(".dose-row").forEach(r => r.classList.remove("editing"));
-    row.classList.add("editing");
-}
-
-function addDoseFromForm() {
-    const label = document.getElementById("addLabel").value.trim() || "Coffee";
-    const mg = parseInt(document.getElementById("addMg").value, 10) || 95;
-    const timeStr = document.getElementById("addTime").value;
-    const ts = timeStrToRecentPastTs(timeStr, Date.now());
-    sendToPlugin({ type: "addDose", mg, label, ts });
-}
-
-// Sets the "When you drank it" input default to now (HH:MM).
-function initAddTimeDefault() {
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const el = document.getElementById("addTime");
-    if (el && !el.value) el.value = hh + ":" + mm;
-}
-
-function updateAddAgoDisplay() {
-    const timeStr = document.getElementById("addTime").value;
-    if (!timeStr) {
-        document.getElementById("addAgoDisplay").textContent = "just now";
-        return;
-    }
-    const ts = timeStrToRecentPastTs(timeStr, Date.now());
-    document.getElementById("addAgoDisplay").textContent = describeAgoFromTs(ts);
-}
-
-function sendToPlugin(payload) {
-    if (!websocket || websocket.readyState !== 1) return;
-    websocket.send(JSON.stringify({
-        event: "sendToPlugin",
-        context: uuid,
-        action: actionInfo.action,
-        payload
-    }));
-}
-
-function loadActionSettings(settings) {
-    if (!settings) return;
-    if (typeof settings.label === "string") {
-        document.getElementById("label").value = settings.label;
-    }
-    if (settings.dose != null) {
-        document.getElementById("dose").value = settings.dose;
-    }
-}
-
-function saveActionSettings() {
-    const payload = {
-        label: (document.getElementById("label").value || "").trim() || "Coffee",
-        dose: parseInt(document.getElementById("dose").value, 10) || 95
-    };
-    if (websocket && websocket.readyState === 1) {
-        websocket.send(JSON.stringify({
-            event: "setSettings",
-            context: uuid,
-            payload: payload
-        }));
-    }
-}
-
-function saveGlobalSettings() {
-    const payload = {
-        halfLifeHours: parseFloat(document.getElementById("halfLifeHours").value) || 5,
-        thresholdMg: parseInt(document.getElementById("thresholdMg").value, 10) || 50,
-    };
-    if (websocket && websocket.readyState === 1) {
-        websocket.send(JSON.stringify({
-            event: "sendToPlugin",
-            context: uuid,
-            action: actionInfo.action,
-            payload: { type: "saveGlobal", settings: payload }
-        }));
-    }
-    setTimeout(requestStatus, 150);
-}
-
-function clearDoses() {
-    if (!confirm("Clear all logged doses? This resets caffeine to 0 on every button.")) return;
-    if (websocket && websocket.readyState === 1) {
-        websocket.send(JSON.stringify({
-            event: "sendToPlugin",
-            context: uuid,
-            action: actionInfo.action,
-            payload: { type: "clearDoses" }
-        }));
-    }
-}
-
-function updateValuePills() {
-    const hl = parseFloat(document.getElementById("halfLifeHours").value);
-    const th = parseInt(document.getElementById("thresholdMg").value, 10);
-    document.getElementById("halfLifeDisplay").textContent = hl.toFixed(1) + "h";
-    document.getElementById("thresholdDisplay").textContent = th + " mg";
-}
-
-function debounce(fn, wait) {
-    let t;
-    return function () {
-        const args = arguments, ctx = this;
-        clearTimeout(t);
-        t = setTimeout(() => fn.apply(ctx, args), wait);
-    };
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Per-button inputs (debounced save on typing)
-    const labelEl = document.getElementById("label");
-    const doseEl = document.getElementById("dose");
-    const debouncedSaveAction = debounce(saveActionSettings, 400);
-    labelEl.addEventListener("input", debouncedSaveAction);
-    doseEl.addEventListener("input", debouncedSaveAction);
-    labelEl.addEventListener("change", saveActionSettings);
-    doseEl.addEventListener("change", saveActionSettings);
-
-    // Preset buttons
-    document.querySelectorAll(".preset").forEach(btn => {
-        btn.addEventListener("click", () => {
-            labelEl.value = btn.dataset.label;
-            doseEl.value = btn.dataset.dose;
-            saveActionSettings();
-        });
-    });
-
-    // Global inputs (debounced save on typing, immediate on commit)
-    const hl = document.getElementById("halfLifeHours");
-    const th = document.getElementById("thresholdMg");
-    const debouncedSaveGlobal = debounce(saveGlobalSettings, 400);
-    [hl, th].forEach(el => {
-        el.addEventListener("input", () => {
-            el.dataset.touched = "1";
-            updateValuePills();
-            debouncedSaveGlobal();
-        });
-        el.addEventListener("change", () => {
-            el.dataset.touched = "1";
-            saveGlobalSettings();
-        });
-    });
-
-    document.getElementById("clearDoses").addEventListener("click", clearDoses);
-
-    // Add-dose form wiring
-    initAddTimeDefault();
-    updateAddAgoDisplay();
-    const addTime = document.getElementById("addTime");
-    const addDoseBtn = document.getElementById("addDoseBtn");
-    addTime.addEventListener("input", updateAddAgoDisplay);
-    addTime.addEventListener("change", updateAddAgoDisplay);
-    addDoseBtn.addEventListener("click", addDoseFromForm);
-
-    updateValuePills();
-});
-</script>
+    <footer class="footer"><span class="connection-dot" id="connection-dot" aria-hidden="true"></span><span id="footer-text" role="status">Connecting to Stream Deck…</span></footer>
+    <p class="gesture-note" id="gesture-note">Tap a drink key to log it. Hold to undo your latest drink.</p>
+</section>
 </body>
 </html>

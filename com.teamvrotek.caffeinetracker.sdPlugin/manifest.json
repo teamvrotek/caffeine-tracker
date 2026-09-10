@@ -2,9 +2,9 @@
   "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
   "UUID": "com.teamvrotek.caffeinetracker",
   "Name": "Caffeine Tracker",
-  "Version": "1.0.0",
+  "Version": "2.0",
   "Author": "VROTEK OÜ",
-  "Description": "Track caffeine in your bloodstream with half-life math. Press to log a drink, long-press to undo. Every button shows your current mg and when it's safe to sleep.",
+  "Description": "Follow your caffeine afterlife. Your coffee has a long goodbye.\n\nLog drinks with one tap, track estimated caffeine remaining and get an optional sleep estimate. Choose your drink icons, set your caffeine amounts and add the coffees you forgot to log. Everything stays on your device.\n\nRequires Stream Deck 6.9+, macOS 13+ or Windows 11 (64-bit).\n\nIf you find this useful, follow @teamvrotek on GitHub or Instagram. Your support helps us feel more special, thank you.",
   "Category": "Caffeine Tracker",
   "CategoryIcon": "imgs/categoryIcon",
   "Icon": "imgs/pluginIcon",
@@ -21,29 +21,43 @@
   "OS": [
     {
       "Platform": "mac",
-      "MinimumVersion": "10.15"
+      "MinimumVersion": "13"
     },
     {
       "Platform": "windows",
-      "MinimumVersion": "10"
+      "MinimumVersion": "11"
     }
   ],
   "Actions": [
     {
       "Icon": "imgs/actionIcon",
-      "Name": "Caffeine Drink",
+      "Name": "Log drink",
       "States": [
         {
           "Image": "imgs/actionDefaultImage",
           "Title": "",
           "TitleAlignment": "bottom",
-          "FontSize": "16",
+          "FontSize": 16,
           "ShowTitle": false
         }
       ],
       "SupportedInMultiActions": false,
       "Tooltip": "Log a dose of caffeine. Long-press to undo the most recent dose.",
       "UUID": "com.teamvrotek.caffeinetracker.drink",
+      "PropertyInspectorPath": "ui/property-inspector.html"
+    },
+    {
+      "Icon": "imgs/statusIcon",
+      "Name": "Caffeine status",
+      "States": [
+        {
+          "Image": "imgs/statusDefaultImage",
+          "ShowTitle": false
+        }
+      ],
+      "SupportedInMultiActions": false,
+      "Tooltip": "Show caffeine, a sleep estimate, both or a status face. Press to reveal the alternate view for five seconds.",
+      "UUID": "com.teamvrotek.caffeinetracker.status",
       "PropertyInspectorPath": "ui/property-inspector.html"
     }
   ]
