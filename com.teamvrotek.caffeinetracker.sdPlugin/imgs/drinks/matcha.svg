@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Matcha bowl</title>
+  <path d="M13 43H87Q84 72 65 80H35Q16 72 13 43Z" fill="#F5EDDE"/>
+  <path d="M35 78H65V85Q50 90 35 85Z" fill="#F5EDDE"/>
+  <ellipse cx="50" cy="43" rx="37" ry="12" fill="#F5EDDE"/>
+  <ellipse cx="50" cy="43" rx="31" ry="7.5" fill="#6B7D3D"/>
+  <path d="M38 42Q43 36 48 42T58 42" fill="none" stroke="#C5D49C" stroke-width="2.5" stroke-linecap="round"/>
+</svg>

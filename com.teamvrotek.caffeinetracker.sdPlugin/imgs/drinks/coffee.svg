@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Coffee mug</title>
+  <path d="M74 33C101 18 108 56 82 70L73 72 75 62C96 58 97 32 81 41L77 47Z" fill="#F5EDDE"/>
+  <path d="M14 24H78L73 67Q72 85 56 88H38Q21 85 19 67Z" fill="#F5EDDE"/>
+  <ellipse cx="46" cy="24" rx="32" ry="11" fill="#F5EDDE"/>
+  <ellipse cx="46" cy="24" rx="26" ry="6" fill="#4B2E18"/>
+  <path d="M22 25Q45 16 70 25Q47 20 22 25Z" fill="#80603B"/>
+</svg>

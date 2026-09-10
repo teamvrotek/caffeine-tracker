@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Black tea cup</title>
+  <path d="M73 39C99 23 107 53 85 68L71 72 74 62C93 57 98 36 80 44Z" fill="#F5EDDE"/>
+  <path d="M13 34H78Q76 64 66 77Q46 92 28 76Q17 62 13 34Z" fill="#F5EDDE"/>
+  <ellipse cx="45.5" cy="34" rx="32.5" ry="11" fill="#F5EDDE"/>
+  <ellipse cx="45.5" cy="34" rx="27" ry="6.5" fill="#61401F"/>
+  <path d="M61 39V59" fill="none" stroke="#977046" stroke-width="2.5"/>
+  <path d="M55 61L61 57 67 61V76Q61 79 55 76Z" fill="#977046"/>
+</svg>

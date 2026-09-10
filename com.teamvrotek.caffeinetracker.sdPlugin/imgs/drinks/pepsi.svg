@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <title>Blue and red cola can</title>
+  <path d="M29 21H71L78 32V80Q78 90 70 92H30Q22 90 22 80V32Z" fill="#F5EDDE"/>
+  <path d="M22 61C42 74 60 50 78 50V76Q51 92 22 79Z" fill="#1769C8"/>
+  <path d="M22 43Q51 31 78 43V50C59 47 40 71 22 58Z" fill="#DE3933"/>
+  <ellipse cx="50" cy="21" rx="23" ry="6.8" fill="#101111"/>
+  <ellipse cx="50" cy="19" rx="22" ry="6.3" fill="#F5EDDE"/>
+  <path d="M33 19Q48 25 68 19" fill="none" stroke="#1769C8" stroke-width="2.4"/>
+  <ellipse cx="50" cy="18.5" rx="8" ry="2.8" fill="#1769C8"/>
+  <ellipse cx="50" cy="18.5" rx="4.8" ry="1.2" fill="#F5EDDE"/>
+  <path d="M28 88Q50 95 72 88" fill="none" stroke="#1769C8" stroke-width="2"/>
+</svg>
