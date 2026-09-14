@@ -4,7 +4,7 @@
 
 <h1 align="center">Caffeine Tracker</h1>
 
-<p align="center"><strong>Version 2.0</strong></p>
+<p align="center"><strong>Version 2.1</strong></p>
 
 Follow your caffeine afterlife. Your coffee has a long goodbye.
 

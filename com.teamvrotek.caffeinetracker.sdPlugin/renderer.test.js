@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { renderButton, renderUndoFlash, renderLoggedFlash, ZONE_COLORS } from "./renderer.js";
+import { renderButton, renderUndoFlash, renderLoggedFlash, renderHoldOverlay, ZONE_COLORS } from "./renderer.js";
 
 const decode = value => Buffer.from(value.split(",", 2)[1], "base64").toString("utf8");
 
@@ -172,4 +172,24 @@ test("unknown artwork and invalid numeric settings produce usable keys", () => {
     assert.match(svg, /Custom drink/);
     assert.match(svg, /\+0 mg/);
     assert.doesNotMatch(svg, /NaN|Infinity|×/);
+});
+
+
+test("hold line overlays every drink layout and feedback without changing existing SVG content", () => {
+    for (const icon of ["coffee", "espresso", "tea", "green-tea", "custom"]) {
+        for (const layout of ["drink", "combined"]) {
+            for (const showSleep of [false, true]) {
+                const options = { icon, layout, showSleep, count: 3, dose: 95, mg: 124, safeTime: "23:45" };
+                for (const base of [renderButton(options), renderLoggedFlash(options), renderUndoFlash(options)]) {
+                    for (const progress of [0.5, 1, 2]) {
+                        const svg = decode(renderHoldOverlay(base, progress));
+                        assert.match(svg, /data-feedback="hold" x="8" y="3"/);
+                        assert.ok(svg.includes(`width="${progress === 0.5 ? "64.00" : "128.00"}" height="3"`));
+                        assert.equal(svg.replace(/<rect data-feedback="hold"[^>]*\/>/, ""), decode(base));
+                    }
+                    for (const progress of [0, -1, NaN, Infinity]) assert.equal(renderHoldOverlay(base, progress), base);
+                }
+            }
+        }
+    }
 });

@@ -1,16 +1,35 @@
 import { CATALOG, ARTWORK, STATUS_DISPLAYS, normalizeActionSettings } from "./config.js";
-import { renderButton, renderUndoFlash, renderLoggedFlash } from "./renderer.js";
+import { renderButton, renderUndoFlash, renderLoggedFlash, renderHoldOverlay } from "./renderer.js";
+
+const HOLD_MS = 700;
 
 export function registerActions(streamDeck, SingletonAction, tracker, ready = Promise.resolve()) {
     const visible = new Map();
     const pressed = new Map();
+    const holdTimers = new Map();
     const flashes = new Map();
     const optionsFor = (entry, status = tracker.status()) => ({ ...entry.settings, ...status, kind: entry.kind,
         count: entry.kind === "drink" ? tracker.countToday(entry.settings.label) : 0 });
     const imageFor = entry => renderButton(optionsFor(entry));
     async function renderOne(entry) {
-        const flash = flashes.get(entry.action.id);
-        await entry.action.setImage(flash?.until > Date.now() ? flash.render(flash.opacity) : imageFor(entry));
+        if (entry.rendering) { entry.renderAgain = true; return; }
+        entry.rendering = true;
+        try {
+            do {
+                entry.renderAgain = false;
+                if (visible.get(entry.action.id) !== entry) return;
+                const flash = flashes.get(entry.action.id);
+                const down = pressed.get(entry.action.id);
+                const image = flash?.until > Date.now() ? flash.render(flash.opacity) : imageFor(entry);
+                const progress = entry.kind === "drink" && down !== undefined ? (Date.now() - down) / HOLD_MS : 0;
+                await entry.action.setImage(renderHoldOverlay(image, progress));
+            } while (entry.renderAgain);
+        } finally { entry.rendering = false; }
+    }
+    function clearPress(id) {
+        for (const timer of holdTimers.get(id) || []) clearTimeout(timer);
+        holdTimers.delete(id);
+        pressed.delete(id);
     }
     function clearFlash(id) {
         const flash = flashes.get(id);
@@ -68,25 +87,44 @@ export function registerActions(streamDeck, SingletonAction, tracker, ready = Pr
         constructor(kind) { super(); this.kind = kind; this.manifestId = `com.teamvrotek.caffeinetracker.${kind}`; }
         async onWillAppear(ev) {
             clearFlash(ev.action.id);
-            pressed.delete(ev.action.id);
+            clearPress(ev.action.id);
             const entry = { action: ev.action, kind: this.kind, settings: normalizeActionSettings(ev.payload.settings, this.kind) };
             visible.set(ev.action.id, entry);
             await guarded(ev.action, async () => { if (visible.get(ev.action.id) === entry) await renderOne(entry); });
         }
-        onWillDisappear(ev) { visible.delete(ev.action.id); pressed.delete(ev.action.id); clearFlash(ev.action.id); }
+        onWillDisappear(ev) { visible.delete(ev.action.id); clearPress(ev.action.id); clearFlash(ev.action.id); }
         async onDidReceiveSettings(ev) {
             const entry = visible.get(ev.action.id);
             if (!entry) return;
             entry.settings = normalizeActionSettings(ev.payload.settings, this.kind);
             clearFlash(ev.action.id);
-            pressed.delete(ev.action.id);
+            clearPress(ev.action.id);
             await guarded(ev.action, async () => { await renderOne(entry); await sendStatus(ev.action); });
         }
         async onPropertyInspectorDidAppear(ev) { await guarded(ev.action, () => sendStatus(ev.action)); }
-        onKeyDown(ev) { pressed.set(ev.action.id, Date.now()); }
+        onKeyDown(ev) {
+            const id = ev.action.id;
+            if (pressed.has(id)) return;
+            pressed.set(id, Date.now());
+            const entry = visible.get(id);
+            if (entry?.kind !== "drink") return;
+            const timers = [];
+            holdTimers.set(id, timers);
+            // Include an exact threshold frame, then keep the full line until release.
+            for (let delay = 65; delay < HOLD_MS + 65; delay += 65) {
+                const timer = setTimeout(() => {
+                    if (holdTimers.get(id) !== timers || visible.get(id) !== entry) return;
+                    guarded(ev.action, async () => {
+                        if (holdTimers.get(id) === timers && visible.get(id) === entry) await renderOne(entry);
+                    });
+                }, Math.min(delay, HOLD_MS));
+                timer.unref?.();
+                timers.push(timer);
+            }
+        }
         async onKeyUp(ev) {
             const down = pressed.get(ev.action.id);
-            pressed.delete(ev.action.id);
+            clearPress(ev.action.id);
             // Ignore unmatched releases after a profile change or plugin restart.
             if (down === undefined) return;
             if (this.kind === "status") {
@@ -105,10 +143,12 @@ export function registerActions(streamDeck, SingletonAction, tracker, ready = Pr
                 return;
             }
             const held = Date.now() - down;
+            const releasedEntry = visible.get(ev.action.id);
+            if (releasedEntry && held >= 65) await guarded(ev.action, () => renderOne(releasedEntry));
             await guarded(ev.action, async () => {
                 const entry = visible.get(ev.action.id);
                 const settings = entry?.settings || normalizeActionSettings(ev.payload.settings);
-                if (held >= 700) {
+                if (held >= HOLD_MS) {
                     const removed = await tracker.undo();
                     if (removed && entry?.settings === settings) {
                         const image = renderUndoFlash({ ...removed, dose: removed.mg });

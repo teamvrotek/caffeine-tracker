@@ -554,3 +554,76 @@ test("a fresh drink confirmation cancels the previous undo restore timer", async
     expectNormal(h, key);
     assert.equal(h.tracker.status().doseCount, 1);
 });
+
+
+test("hold fills at 700 ms, stays full, and only undoes on release", async t => {
+    mockClock(t);
+    const h = harness();
+    const key = h.key("coffee-1");
+    await key.handler.onWillAppear(key.event);
+    await press(key);
+    await key.handler.onKeyDown(key.event);
+    await advance(t, 350);
+    let svg = svgFor(key.calls.images.at(-1));
+    assert.match(svg, /data-feedback="hold" x="8" y="3" width="64.00"/);
+    assert.match(svg, /data-feedback="logged"/);
+    await advance(t, 349);
+    assert.doesNotMatch(svgFor(key.calls.images.at(-1)), /data-feedback="hold"[^>]*width="128.00"/);
+    assert.equal(h.tracker.status().doseCount, 1);
+    await advance(t, 1);
+    assert.match(svgFor(key.calls.images.at(-1)), /data-feedback="hold"[^>]*width="128.00"/);
+    await advance(t, 2000);
+    assert.match(svgFor(key.calls.images.at(-1)), /data-feedback="hold"[^>]*width="128.00"/);
+    assert.equal(h.tracker.status().doseCount, 1);
+    await key.handler.onKeyUp(key.event);
+    assert.equal(h.tracker.status().doseCount, 0);
+    assert.doesNotMatch(svgFor(key.calls.images.at(-1)), /data-feedback="hold"/);
+    assert.match(svgFor(key.calls.images.at(-1)), /Removed/);
+});
+
+test("release at 699 ms logs once and cancels the remaining hold frame", async t => {
+    mockClock(t);
+    const h = harness();
+    const key = h.key("coffee-1");
+    await key.handler.onWillAppear(key.event);
+    await key.handler.onKeyDown(key.event);
+    await advance(t, 699);
+    await key.handler.onKeyUp(key.event);
+    assert.equal(h.tracker.status().doseCount, 1);
+    const count = key.calls.images.length;
+    await advance(t, 100);
+    assert.equal(key.calls.images.length, count);
+    expectFeedback(h, key, 1);
+});
+
+test("settings changes and disappearance cancel hold animation and pending undo", async t => {
+    mockClock(t);
+    for (const cancel of ["settings", "disappear"]) {
+        const h = harness();
+        const key = h.key("coffee-1");
+        await key.handler.onWillAppear(key.event);
+        await key.handler.onKeyDown(key.event);
+        await advance(t, 350);
+        if (cancel === "settings") await key.handler.onDidReceiveSettings(key.event);
+        else await key.handler.onWillDisappear(key.event);
+        const count = key.calls.images.length;
+        await advance(t, 1000);
+        await key.handler.onKeyUp(key.event);
+        assert.equal(key.calls.images.length, count);
+        assert.equal(h.tracker.status().doseCount, 0);
+        if (cancel === "settings") expectNormal(h, key);
+    }
+});
+
+test("status holds never show a hold line", async t => {
+    mockClock(t);
+    const h = harness();
+    const key = h.key("status-1", "status");
+    await key.handler.onWillAppear(key.event);
+    const count = key.calls.images.length;
+    await key.handler.onKeyDown(key.event);
+    await advance(t, 900);
+    assert.equal(key.calls.images.length, count);
+    await key.handler.onKeyUp(key.event);
+    assert.doesNotMatch(svgFor(key.calls.images.at(-1)), /data-feedback="hold"/);
+});

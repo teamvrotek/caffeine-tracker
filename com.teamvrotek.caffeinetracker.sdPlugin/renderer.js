@@ -170,6 +170,16 @@ function renderKey(options, loggedOpacity = 0) {
 
 export function renderButton(options = {}) { return renderKey(options); }
 
+// Append above the existing image without moving or resizing any key content.
+export function renderHoldOverlay(image, progress = 0) {
+    const value = Number(progress);
+    const hold = Number.isFinite(value) ? Math.max(0, Math.min(1, value)) : 0;
+    if (hold === 0) return image;
+    const svg = Buffer.from(image.split(",")[1], "base64").toString("utf8");
+    const line = `<rect data-feedback="hold" x="8" y="3" width="${(128 * hold).toFixed(2)}" height="3" rx="1.5" fill="${CREAM}" opacity=".7"/>`;
+    return "data:image/svg+xml;base64," + Buffer.from(svg.replace(/<\/svg>$/, line + "</svg>")).toString("base64");
+}
+
 // The controller supplies opacity frames. Keep every configured key element still.
 export function renderLoggedFlash(options = {}, opacity = 1) {
     const value = Number(opacity);
