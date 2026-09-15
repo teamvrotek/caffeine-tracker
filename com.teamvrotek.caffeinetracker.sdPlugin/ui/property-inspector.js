@@ -37,7 +37,7 @@ function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegist
     websocket = new WebSocket('ws://127.0.0.1:' + inPort);
     websocket.onopen = () => {
         websocket.send(JSON.stringify({ event: inRegisterEvent, uuid }));
-        setFooter('Connected. Loading your settings…', true);
+        setFooter('');
         requestStatus();
         statusPollTimer = setInterval(requestStatus, 5000);
     };
@@ -57,7 +57,7 @@ function connectElgatoStreamDeckSocket(inPort, inPropertyInspectorUUID, inRegist
     websocket.onerror = () => showError('Could not connect to Stream Deck. Select the key again to reconnect.');
     websocket.onclose = () => {
         clearInterval(statusPollTimer);
-        setFooter('Disconnected. Select this key again to reconnect.', false);
+        showError('Disconnected. Select this key again to reconnect.');
         setControlsEnabled(false);
     };
 }
@@ -80,15 +80,15 @@ function requestStatus() {
     if (connected()) sendToPlugin({ type: 'getStatus' });
 }
 
-function setFooter(message, online = connected()) {
+function setFooter(message) {
     $('footer-text').textContent = message;
-    $('connection-dot').classList.toggle('connected', Boolean(online));
+    $('footer-text').hidden = !message;
 }
 
 function showError(message) {
     $('message').textContent = message;
     $('message').hidden = false;
-    setFooter('Please review the message above.');
+    setFooter('');
 }
 
 function clearError() {
@@ -208,7 +208,6 @@ function renderKeySettings() {
     $('drink-settings').hidden = statusOnly;
     $('status-settings').hidden = !statusOnly;
     $('show-sleep-field').hidden = statusOnly;
-    $('gesture-note').hidden = statusOnly;
     $('preview-title').textContent = statusOnly ? 'Caffeine status' : settings.label || knownDrink()?.name || 'This key';
     $('preview-description').textContent = statusOnly ? 'Your total, at a glance' : Number.isFinite(Number(settings.dose)) ? 'One press adds ' + settings.dose + ' mg' : 'Choose your drink';
     for (const [key, id] of Object.entries(settingFields)) {
@@ -256,9 +255,6 @@ function renderStatusDisplays(data) {
         if (image.getAttribute('src') !== source) image.src = source;
         image.hidden = false;
     });
-    const alternate = displays.find(item => item.id === selected)?.alternateName || statusAlternates[selected];
-    const note = 'Press to show ' + alternate + ' for five seconds. Press again to return.';
-    if ($('status-display-note').textContent !== note) $('status-display-note').textContent = note;
 }
 
 function renderLiveStatus(data) {
@@ -337,7 +333,7 @@ function handlePluginMessage(payload) {
     if (historyChanged || editedDrinkMissing || (editingId == null && !$('history-list').contains(document.activeElement) && historySignature(doses) !== renderedHistory)) renderHistory(doses);
     $('history-count').textContent = doses.length + ' logged';
     setControlsEnabled(true);
-    if ($('message').hidden && !pendingMutation && !Object.keys(pendingSettings).length && !pendingGlobals.size) setFooter('Changes save automatically');
+    if ($('message').hidden && !pendingMutation && !Object.keys(pendingSettings).length && !pendingGlobals.size) setFooter('');
 }
 
 function localDateTime(ts) {
@@ -502,6 +498,13 @@ function activateTab(name, focus = false) {
 }
 
 function initialize() {
+    document.querySelectorAll('.footer a').forEach(link => {
+        link.addEventListener('click', event => {
+            if (!connected()) return;
+            event.preventDefault();
+            websocket.send(JSON.stringify({ event: 'openUrl', payload: { url: link.href } }));
+        });
+    });
     const tabs = ['key', 'history', 'sleep'];
     tabs.forEach((name, index) => {
         $('tab-' + name).addEventListener('click', () => activateTab(name));

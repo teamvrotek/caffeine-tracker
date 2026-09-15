@@ -70,10 +70,11 @@ hr { border: 0; height: 1px; background: var(--line); margin: 16px 0; }
 .segment label:has(input:checked) { background: #505054; color: var(--ink); }
 .check { display: flex; align-items: center; gap: 9px; min-height: 25px; margin-top: 12px; }
 .check input { width: 15px; height: 15px; margin: 0; accent-color: var(--warm); }
-.footer { display: flex; gap: 7px; align-items: center; min-height: 37px; padding: 10px 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
-.connection-dot { flex: 0 0 5px; width: 5px; height: 5px; border-radius: 50%; background: #85817a; }
-.connection-dot.connected { background: #a9c9b1; }
-.gesture-note { margin: 0; padding: 0 16px 14px; color: var(--muted); font-size: 10px; }
+.footer { min-height: 37px; padding: 10px 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+.footer a { color: inherit; text-underline-offset: 2px; }
+.footer a:hover { color: var(--ink); }
+.footer a:focus-visible { outline: 2px solid var(--warm); outline-offset: 2px; }
+.save-status { margin: 0; padding: 0 16px 10px; color: var(--muted); font-size: 10px; }
 .history-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 4px; }
 .history-heading strong { font-weight: 500; }
 .entry { padding: 12px 0; border-bottom: 1px solid var(--line); }

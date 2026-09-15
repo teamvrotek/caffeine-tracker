@@ -2,7 +2,7 @@
   "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
   "UUID": "com.teamvrotek.caffeinetracker",
   "Name": "Caffeine Tracker",
-  "Version": "2.1",
+  "Version": "2.2",
   "Author": "VROTEK OÜ",
   "Description": "Caffeine Tracker tracks your caffeine intake and estimates its afterlife in your body, helping you judge whether another drink fits your planned bedtime.\n\nPress a Stream Deck key to log a drink or hold to undo the last entry. Set your drink amounts, bedtime and how quickly your body processes caffeine. A status key shows estimated caffeine remaining and when it should fall below your chosen level for sleep. You can customise drink icons and add or edit past drinks. Everything stays on your device.",
   "Category": "Caffeine Tracker",

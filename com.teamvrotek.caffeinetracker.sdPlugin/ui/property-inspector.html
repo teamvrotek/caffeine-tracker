@@ -53,13 +53,12 @@
         </div>
         <div id="status-settings" hidden>
             <span class="field-label" id="status-display-label">Display</span>
-            <div class="status-displays" role="radiogroup" aria-labelledby="status-display-label" aria-describedby="status-display-note">
+            <div class="status-displays" role="radiogroup" aria-labelledby="status-display-label">
                 <label class="status-display"><input type="radio" name="status-display" value="caffeine" data-status-display="caffeine" disabled><span class="status-display-preview"><img id="status-preview-caffeine" width="72" height="72" alt="" hidden></span><span>Caffeine</span></label>
                 <label class="status-display"><input type="radio" name="status-display" value="sleep" data-status-display="sleep" disabled><span class="status-display-preview"><img id="status-preview-sleep" width="72" height="72" alt="" hidden></span><span>Sleep estimate</span></label>
                 <label class="status-display"><input type="radio" name="status-display" value="combined" data-status-display="combined" disabled><span class="status-display-preview"><img id="status-preview-combined" width="72" height="72" alt="" hidden></span><span>Caffeine + sleep</span></label>
                 <label class="status-display"><input type="radio" name="status-display" value="face" data-status-display="face" disabled><span class="status-display-preview"><img id="status-preview-face" width="72" height="72" alt="" hidden></span><span>Status face</span></label>
             </div>
-            <p class="hint" id="status-display-note">Press to show status face for five seconds. Press again to return.</p>
         </div>
         <label class="check" id="show-sleep-field"><input type="checkbox" id="show-sleep" disabled><span>Show sleep estimate</span></label>
         <p class="hint" id="layout-note">Keep your total on a separate status key.</p>
@@ -98,8 +97,8 @@
             <p class="hint">Colour bands describe estimated caffeine remaining, not daily intake or medical safety.</p>
         </details>
     </div>
-    <footer class="footer"><span class="connection-dot" id="connection-dot" aria-hidden="true"></span><span id="footer-text" role="status">Connecting to Stream Deck…</span></footer>
-    <p class="gesture-note" id="gesture-note">Tap a drink key to log it. Hold to undo your latest drink.</p>
+    <p class="save-status" id="footer-text" role="status" hidden></p>
+    <footer class="footer">Follow @teamvrotek on <a href="https://github.com/teamvrotek" target="_blank" rel="noopener noreferrer">GitHub</a> or <a href="https://www.instagram.com/teamvrotek/" target="_blank" rel="noopener noreferrer">Instagram</a>.</footer>
 </section>
 </body>
 </html>
