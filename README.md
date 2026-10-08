@@ -4,13 +4,13 @@
 
 <h1 align="center">Caffeine Tracker</h1>
 
-<p align="center"><strong>Version 2.2</strong></p>
+<p align="center"><strong>Version 2.3</strong></p>
 
 Follow your caffeine afterlife. Your coffee has a long goodbye.
 
 Log drinks with one tap, track estimated caffeine remaining and get an optional sleep estimate. Choose your drink icons, set your caffeine amounts and add the coffees you forgot to log. Everything stays on your device.
 
-Requires Stream Deck 6.9+, macOS 13+ or Windows 11 (64-bit).
+Requires Stream Deck 6.9+, macOS 13+ or Windows 10 or later (64-bit).
 
 If you find this useful, follow @teamvrotek on GitHub or Instagram. Your support helps us feel more special, thank you.
 
@@ -20,7 +20,7 @@ If you find this useful, follow @teamvrotek on GitHub or Instagram. Your support
 
 ## Install and set up
 
-You need **Stream Deck 6.9+** on **macOS 13+** or **Windows 11 (64-bit)**. The plugin runs on Stream Deck's bundled Node.js runtime. You do not need to install Node.js to use it.
+You need **Stream Deck 6.9+** on **macOS 13+** or **Windows 10 or later (64-bit)**. The plugin runs on Stream Deck's bundled Node.js runtime. You do not need to install Node.js to use it.
 
 1. Open `com.teamvrotek.caffeinetracker.streamDeckPlugin` on your computer and follow Stream Deck's installation prompt. To create the installer from source, see [Build from source](#build-from-source). The build puts it in `Release/`.
 2. Find **Caffeine Tracker** in the action list and drag **Log drink** onto a key.

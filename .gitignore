@@ -4,9 +4,6 @@ node_modules/
 .vscode/
 .idea/
 
-# Build output - ship .streamDeckPlugin via Releases, not in the repo tree
-Release/*.streamDeckPlugin
-
 # Local development and publishing tools
 /scripts/
 /marketplace/

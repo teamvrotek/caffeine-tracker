@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.3
+
+- Fixed installation on Windows 11. Stream Deck refused the plugin with a message asking to update the operating system, because Windows 11 reports itself as version 10 and the plugin required version 11. The plugin now requires Windows 10 or later, the same as Elgato's own plugins.
+
+Requires Stream Deck 6.9+, macOS 13+ or Windows 10 or later (64-bit).
+
 ## 2.0
 
 - Log drinks with 16 duotone appearances and 20 editable presets.
